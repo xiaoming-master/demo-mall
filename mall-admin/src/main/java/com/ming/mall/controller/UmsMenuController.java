@@ -1,7 +1,6 @@
 package com.ming.mall.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ming.mall.common.api.CommonPage;
 import com.ming.mall.common.api.CommonResult;
 import com.ming.mall.dto.UmsMenuNode;
