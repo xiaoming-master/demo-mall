@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.mall.mapper.UmsRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ming.mall.model.UmsRole">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="admin_count" property="adminCount"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, description, admin_count, create_time, status, sort
+    </sql>
+
+    <!--    通过管理员id获取菜单-->
+    <select id="getMenuByAdminId" resultMap="com.ming.mall.mapper.UmsMenuMapper.BaseResultMap">
+        select m.id,
+               m.parent_id,
+               m.create_time,
+               m.title,
+               m.level,
+               m.sort,
+               m.name,
+               m.icon,
+               m.hidden
+        from ums_admin a,
+             ums_role r,
+             ums_admin_role_relation arr,
+             ums_menu m,
+             ums_role_menu_relation rmr
+        where a.id = arr.admin_id
+          and r.id = arr.role_id
+          and r.id = rmr.role_id
+          and m.id = rmr.menu_id
+          and a.id = #{adminId};
+    </select>
+    <select id="getRoleByAdminId" resultMap="BaseResultMap">
+        select r.id,
+               r.name,
+               r.description,
+               r.admin_count,
+               r.create_time,
+               r.status,
+               r.sort
+        from ums_admin a,
+             ums_role r,
+             ums_admin_role_relation arr
+        where a.id = arr.admin_id
+          and r.id = arr.role_id
+          and a.id = #{adminId};
+    </select>
+
+</mapper>

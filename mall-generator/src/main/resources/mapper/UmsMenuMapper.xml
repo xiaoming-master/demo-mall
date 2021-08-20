@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.mall.mapper.UmsMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ming.mall.model.UmsMenu">
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="title" property="title"/>
+        <result column="level" property="level"/>
+        <result column="sort" property="sort"/>
+        <result column="name" property="name"/>
+        <result column="icon" property="icon"/>
+        <result column="hidden" property="hidden"/>
+    </resultMap>
+
+    <resultMap id="UmsMenuNodeResultMap" type="com.ming.mall.dto.UmsMenuNode" extends="BaseResultMap">
+        <collection property="children" ofType="com.ming.mall.dto.UmsMenuNode" column="parentId" select="getMenuByTree">
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, create_time, title, level, sort, name, icon, hidden
+    </sql>
+    <select id="getMenuByTree" resultMap="UmsMenuNodeResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ums_menu
+        where parent_id = #{parentId};
+    </select>
+
+</mapper>
