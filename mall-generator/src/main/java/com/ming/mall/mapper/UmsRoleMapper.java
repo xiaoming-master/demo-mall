@@ -31,4 +31,5 @@ public interface UmsRoleMapper extends BaseMapper<UmsRole> {
      * @return
      */
     List<UmsRole> getRoleByAdminId(@Param(value = "adminId") Long adminId);
+
 }

@@ -2,14 +2,20 @@ package com.ming.mall.service.impl;
 
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.ming.mall.common.exception.Asserts;
 import com.ming.mall.common.util.RequestUtil;
 import com.ming.mall.mapper.UmsAdminLoginLogMapper;
 import com.ming.mall.mapper.UmsAdminMapper;
+import com.ming.mall.mapper.UmsAdminRoleRelationMapper;
+import com.ming.mall.mapper.UmsRoleMapper;
 import com.ming.mall.model.UmsAdmin;
 import com.ming.mall.model.UmsAdminLoginLog;
+import com.ming.mall.model.UmsAdminRoleRelation;
+import com.ming.mall.model.UmsRole;
 import com.ming.mall.security.component.AdminUserDetail;
 import com.ming.mall.security.utils.JwtTokenUtil;
 import com.ming.mall.service.AdminCacheService;
@@ -21,11 +27,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +60,18 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
 
     @Autowired
     private UmsAdminLoginLogMapper adminLoginLogMapper;
+
+    @Autowired
+    private UmsAdminMapper adminMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UmsRoleMapper roleMapper;
+
+    @Autowired
+    private UmsAdminRoleRelationMapper adminRoleRelationMapper;
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -104,7 +123,125 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     }
 
     /**
+     * 通过adminId删除管理员
+     *
+     * @param adminId
+     * @return
+     */
+    @Override
+    public boolean deleteAdminById(Long adminId) {
+        adminCacheService.delAdmin(adminId);
+        boolean flag = removeById(adminId);
+        adminCacheService.delResourceList(adminId);
+
+        return flag;
+    }
+
+    /**
+     * 通过用户名或昵称查找用户
+     *
+     * @param keyword  关键字
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public List<UmsAdmin> getAdminByName(String keyword, Integer pageNum, Integer pageSize) {
+        //分页
+        PageHelper.startPage(pageNum, pageSize);
+
+        QueryWrapper<UmsAdmin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(keyword != null, "username", keyword)
+                .or()
+                .like(keyword != null, "nick_name", keyword);
+        return adminMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 注册
+     *
+     * @param umsAdmin
+     * @return
+     */
+    @Override
+    public UmsAdmin register(UmsAdmin umsAdmin) {
+        //查看是否有相同的用户名
+        Integer count = adminMapper.selectCount(new QueryWrapper<UmsAdmin>().eq("username", umsAdmin.getUsername()));
+        if (count > 0) {
+            return null;
+        }
+        umsAdmin.setCreateTime(new Date());
+        umsAdmin.setStatus(1);
+        //加密密码
+        umsAdmin.setPassword(passwordEncoder.encode(umsAdmin.getPassword()));
+
+        adminMapper.insert(umsAdmin);
+        return umsAdmin;
+    }
+
+    /**
+     * 根据管理员ID获取对应角色信息
+     *
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<UmsRole> getRoleInfoByAdminId(Long adminId) {
+        List<UmsRole> roles = roleMapper.getRoleByAdminId(adminId);
+        return roles;
+    }
+
+    /**
+     * 批量更新管理员角色信息
+     *
+     * @param adminId
+     * @param roleIds
+     * @return
+     */
+    @Transactional
+    @Override
+    public int updateRoles(Long adminId, Integer[] roleIds) {
+        //删除旧的关系
+        adminRoleRelationMapper.delete(new QueryWrapper<UmsAdminRoleRelation>().eq("adminId", adminId));
+        //建立新关系
+        int count = adminRoleRelationMapper.insertRoleByIds(adminId, roleIds);
+        //删除redis中的旧数据
+        adminCacheService.delResourceList(adminId);
+        return count;
+    }
+
+    /**
+     * 更新管理员信息
+     *
+     * @param id
+     * @param admin
+     * @return
+     */
+
+    @Override
+    public int updateAdminInfo(Long id, UmsAdmin admin) {
+        //查询旧数据
+        UmsAdmin oldAdmin = adminMapper.selectById(id);
+        if (passwordEncoder.matches(oldAdmin.getPassword(), admin.getPassword())) {//密码相同，不需要修改
+            admin.setPassword(null);
+        } else {
+            if (StrUtil.isEmpty(admin.getPassword())) {
+                admin.setPassword(null);
+            } else {
+                //加密密码
+                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+            }
+        }
+        admin.setId(id);
+        int count = adminMapper.updateById(admin);
+        //删除redis中的旧数据
+        adminCacheService.delAdmin(id);
+        return count;
+    }
+
+    /**
      * 添加登陆记录
+     *
      * @param adminId
      */
     public void insertLoginLog(Long adminId) {
