@@ -121,7 +121,7 @@ public class UmsAdminController {
 
     @ApiOperation(value = "通过用户名或昵称查找用户")
     @GetMapping("/list")
-    public CommonResult getAdminByName(@RequestParam String keyword,
+    public CommonResult getAdminByName(@RequestParam(required = false) String keyword,
                                        @RequestParam Integer pageNum,
                                        @RequestParam Integer pageSize) {
         List<UmsAdmin> admins = adminService.getAdminByName(keyword, pageNum, pageSize);
@@ -162,7 +162,7 @@ public class UmsAdminController {
     }
 
     @ApiOperation(value = "根据管理员ID获取对应角色信息")
-    @GetMapping("/role/{adminId }")
+    @GetMapping("/role/{adminId}")
     public CommonResult getRoleInfoByAdminId(@PathVariable Long adminId) {
         List<UmsRole> roles = adminService.getRoleInfoByAdminId(adminId);
         return CommonResult.success(roles);

@@ -45,4 +45,19 @@ public interface IUmsMenuService extends IService<UmsMenu> {
      * @return
      */
     int updateMenu(Long id, UmsMenu umsMenu);
+
+    /**
+     * 通过角色id获取菜单
+     * @param roleId
+     * @return
+     */
+    List<UmsMenu> getMenuByRoleId(Long roleId);
+
+    /**
+     * 修改菜单状态
+     * @param id
+     * @param hidden
+     * @return
+     */
+    int updateHidden(Long id, Integer hidden);
 }

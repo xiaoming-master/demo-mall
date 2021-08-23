@@ -1,13 +1,16 @@
 package com.ming.mall.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.ming.mall.common.service.RedisService;
 import com.ming.mall.dto.UmsMenuNode;
 import com.ming.mall.mapper.UmsMenuMapper;
 import com.ming.mall.model.UmsMenu;
 import com.ming.mall.service.IUmsMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,11 +30,24 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     @Autowired
     private UmsMenuMapper menuMapper;
 
+    @Autowired
+    private RedisService redisService;
+
+    @Value("${redis.database}")
+    private String REDIS_DATABASE;
+    @Value("${redis.expire.common}")
+    private Long REDIS_EXPIRE;
+    @Value("${redis.key.treeMenu}")
+    private String REDIS_TREE_MENU;
+    private final String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
+
     @Override
     public int createMenu(UmsMenu umsMenu) {
         umsMenu.setCreateTime(new Date());
         //设置菜单级别
         setLevel(umsMenu);
+        //删除redis数据
+        redisService.del(key);
         return menuMapper.insert(umsMenu);
     }
 
@@ -58,7 +74,14 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
      */
     @Override
     public List<UmsMenuNode> getMenuByTree() {
-        List<UmsMenuNode> umsMenuNodes = menuMapper.getMenuByTree(0L);
+        List<UmsMenuNode> umsMenuNodes = null;
+        //从redis中获取
+        umsMenuNodes = (List<UmsMenuNode>) redisService.get(key);
+        if (CollUtil.isEmpty(umsMenuNodes)) {//redis中没有，从数据库中获取
+            umsMenuNodes = menuMapper.getMenuByTree(0L);
+            //再存入redis
+            redisService.set(key, umsMenuNodes);
+        }
         return umsMenuNodes;
     }
 
@@ -67,8 +90,39 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         umsMenu.setId(id);
         //修改等级
         setLevel(umsMenu);
+        //删除redis中的数据
+        redisService.del(key);
         //更新
         return menuMapper.updateById(umsMenu);
+    }
+
+    /**
+     * 通过角色id获取菜单
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<UmsMenu> getMenuByRoleId(Long roleId) {
+        return menuMapper.getMenuByRoleId(roleId);
+    }
+
+    /**
+     * 修改菜单状态
+     *
+     * @param id
+     * @param hidden
+     * @return
+     */
+    @Override
+    public int updateHidden(Long id, Integer hidden) {
+        UmsMenu menu = new UmsMenu();
+        menu.setId(id);
+        menu.setHidden(hidden);
+        //删除redis中的数据
+        redisService.del(key);
+        //更新数据
+        return menuMapper.updateById(menu);
     }
 
 

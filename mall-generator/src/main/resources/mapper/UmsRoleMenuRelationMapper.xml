@@ -4,14 +4,23 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.UmsRoleMenuRelation">
-        <id column="id" property="id" />
-        <result column="role_id" property="roleId" />
-        <result column="menu_id" property="menuId" />
+        <id column="id" property="id"/>
+        <result column="role_id" property="roleId"/>
+        <result column="menu_id" property="menuId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, role_id, menu_id
     </sql>
+
+    <!--    给角色分配菜单-->
+    <insert id="allocMenu">
+        insert into ums_role_menu_relation(role_id, menu_id)
+        VALUES
+        <foreach collection="menuIds" item="menuId" separator=",">
+            (#{roleId},#{menuId])
+        </foreach>
+    </insert>
 
 </mapper>

@@ -16,8 +16,8 @@
     </resultMap>
 
     <resultMap id="UmsMenuNodeResultMap" type="com.ming.mall.dto.UmsMenuNode" extends="BaseResultMap">
-        <collection property="children" ofType="com.ming.mall.dto.UmsMenuNode" column="parentId" select="getMenuByTree">
-        </collection>
+        <collection property="children" ofType="com.ming.mall.dto.UmsMenuNode" column="id"
+                    select="getMenuByTree"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -28,7 +28,23 @@
         select
         <include refid="Base_Column_List"/>
         from ums_menu
-        where parent_id = #{parentId};
+        where parent_id = #{parentId}
+    </select>
+    <!--    通过角色id获取菜单-->
+    <select id="getMenuByRoleId" resultType="com.ming.mall.model.UmsMenu">
+        SELECT DISTINCT m.id          id,
+                        m.parent_id   parentId,
+                        m.create_time createTime,
+                        m.title       title,
+                        m.level       level,
+                        m.sort        sort,
+                        m.name        name,
+                        m.icon        icon,
+                        m.hidden      hidden
+        FROM ums_menu m
+                 JOIN ums_role_menu_relation rmr ON m.id = rmr.menu_id
+        WHERE rmr.role_id = #{roleId}
+          AND m.id IS NOT NULL
     </select>
 
 </mapper>

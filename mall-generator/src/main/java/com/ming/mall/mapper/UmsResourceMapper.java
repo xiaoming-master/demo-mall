@@ -1,7 +1,11 @@
 package com.ming.mall.mapper;
 
-import com.ming.mall.model.UmsResource;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ming.mall.model.UmsAdmin;
+import com.ming.mall.model.UmsResource;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,19 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface UmsResourceMapper extends BaseMapper<UmsResource> {
 
+    /**
+     * 通过roleId获取资源
+     *
+     * @param roleId
+     * @return
+     */
+    List<UmsResource> getResourceByRoleId(@Param(value = "roleId") Long roleId);
+
+//    /**
+//     * 获取有该资源的管理员信息
+//     *
+//     * @param resourceId
+//     * @return
+//     */
+//    List<UmsAdmin> getAdminByResourceId(@Param(value = "resourceId") Long resourceId);
 }

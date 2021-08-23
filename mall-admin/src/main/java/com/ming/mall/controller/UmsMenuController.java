@@ -3,6 +3,7 @@ package com.ming.mall.controller;
 
 import com.ming.mall.common.api.CommonPage;
 import com.ming.mall.common.api.CommonResult;
+import com.ming.mall.common.service.RedisService;
 import com.ming.mall.dto.UmsMenuNode;
 import com.ming.mall.model.UmsMenu;
 import com.ming.mall.service.IUmsMenuService;
@@ -89,12 +90,9 @@ public class UmsMenuController {
     @ApiOperation(value = "修改菜单栏显示隐藏状态")
     @PostMapping("/updateHidden/{id}")
     public CommonResult updateHidden(@PathVariable Long id, @RequestParam Integer hidden) {
-        UmsMenu menu = new UmsMenu();
-        menu.setId(id);
-        menu.setHidden(hidden);
-        boolean flag = menuService.updateById(menu);
-        if (flag) {
-            return CommonResult.success(flag);
+        int count = menuService.updateHidden(id, hidden);
+        if (count>1) {
+            return CommonResult.success(count);
         }else {
             return CommonResult.failed();
         }

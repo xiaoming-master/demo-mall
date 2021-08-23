@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-18
  */
 @RestController
-@RequestMapping("/pms-product")
+@RequestMapping("/product")
 public class PmsProductController {
 
 }

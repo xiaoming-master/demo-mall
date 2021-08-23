@@ -202,7 +202,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
     @Override
     public int updateRoles(Long adminId, Integer[] roleIds) {
         //删除旧的关系
-        adminRoleRelationMapper.delete(new QueryWrapper<UmsAdminRoleRelation>().eq("adminId", adminId));
+        adminRoleRelationMapper.delete(new QueryWrapper<UmsAdminRoleRelation>().eq("admin_id", adminId));
         //建立新关系
         int count = adminRoleRelationMapper.insertRoleByIds(adminId, roleIds);
         //删除redis中的旧数据

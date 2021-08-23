@@ -18,8 +18,8 @@
     <insert id="insertRoleByIds">
         insert into ums_admin_role_relation(admin_id, role_id)
         VALUES
-        <foreach collection="roleIds" separator="," open="(" close=")" item="roleId">
-            #{adminId},#{roleId}
+        <foreach collection="roleIds" separator="," item="roleId">
+            (#{adminId},#{roleId})
         </foreach>
     </insert>
 

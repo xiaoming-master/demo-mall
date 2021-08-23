@@ -32,6 +32,14 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
         configAttributeMap = dynamicSecurityService.loadDataSource();
     }
 
+    /**
+     * 清除资源
+     */
+    public void clean() {
+        configAttributeMap.clear();
+        configAttributeMap = null;
+    }
+
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         if (configAttributeMap == null) {

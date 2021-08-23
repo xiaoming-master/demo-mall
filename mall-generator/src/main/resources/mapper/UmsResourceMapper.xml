@@ -4,17 +4,53 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.UmsResource">
-        <id column="id" property="id" />
-        <result column="create_time" property="createTime" />
-        <result column="name" property="name" />
-        <result column="url" property="url" />
-        <result column="description" property="description" />
-        <result column="category_id" property="categoryId" />
+        <id column="id" property="id"/>
+        <result column="create_time" property="createTime"/>
+        <result column="name" property="name"/>
+        <result column="url" property="url"/>
+        <result column="description" property="description"/>
+        <result column="category_id" property="categoryId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, create_time, name, url, description, category_id
     </sql>
+
+    <!--    通过roleid获取资源-->
+    <select id="getResourceByRoleId" resultType="com.ming.mall.model.UmsResource">
+        SELECT r.id          id,
+               r.create_time createTime,
+               r.name        name,
+               r.url         url,
+               r.description description,
+               r.category_id categoryId
+        FROM ums_resource r
+                 JOIN ums_role_resource_relation rrr ON r.id = rrr.resource_id
+        WHERE rrr.role_id = #{roleId}
+        GROUP BY r.id
+    </select>
+
+<!--    &lt;!&ndash;    获取去有该资源的管理员信息&ndash;&gt;-->
+<!--    <select id="getAdminByResourceId" resultType="com.ming.mall.model.UmsAdmin">-->
+<!--        SELECT DISTINCT a.id          id,-->
+<!--                        a.username    username,-->
+<!--                        a.icon        icon,-->
+<!--                        a.email       email,-->
+<!--                        a.nick_name   nickName,-->
+<!--                        a.note        note,-->
+<!--                        a.create_time createTime,-->
+<!--                        a.login_time  loginTime,-->
+<!--                        a.status      status-->
+<!--        FROM ums_admin a,-->
+<!--             ums_admin_role_relation arr,-->
+<!--             ums_role_resource_relation rrr,-->
+<!--             ums_resource r-->
+<!--        WHERE a.id = arr.admin_id-->
+<!--          AND arr.role_id = rrr.role_id-->
+<!--          AND rrr.resource_id = r.id-->
+<!--          AND r.id = #{resourceId}-->
+<!--          AND a.id IS NOT NULL-->
+<!--    </select>-->
 
 </mapper>

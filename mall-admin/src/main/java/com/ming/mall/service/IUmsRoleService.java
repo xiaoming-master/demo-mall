@@ -29,4 +29,20 @@ public interface IUmsRoleService extends IService<UmsRole> {
      * @return
      */
     List<UmsRole> getRoleByAdminId(Long adminId);
+
+    /**
+     * 批量删除角色
+     * @param ids 要删除的角色id集合
+     * @return
+     */
+    boolean deleteRole(List<Long> ids);
+
+    /**
+     * 根据角色名称查询角色
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    List<UmsRole> getRoleByKeyword(String keyword, Integer pageNum, Integer pageSize);
 }

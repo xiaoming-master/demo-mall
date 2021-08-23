@@ -22,4 +22,11 @@ public interface UmsMenuMapper extends BaseMapper<UmsMenu> {
      * @return
      */
     List<UmsMenuNode> getMenuByTree(@Param(value = "parentId") Long parentId);
+
+    /**
+     * 通过角色id获取菜单
+     * @param roleId
+     * @return
+     */
+    List<UmsMenu> getMenuByRoleId(@Param(value = "roleId") Long roleId);
 }
