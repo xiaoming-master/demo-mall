@@ -1,18 +1,16 @@
 package com.ming.mall.controller;
 
 
-import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ming.mall.common.api.CommonPage;
 import com.ming.mall.common.api.CommonResult;
 import com.ming.mall.model.PmsBrand;
-import com.ming.mall.service.IPmsAlbumPicService;
 import com.ming.mall.service.IPmsBrandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,7 +96,43 @@ public class PmsBrandController {
         int count = brandService.updateBrand(id, pmsBrandParam);
         if (count > 0) {
             return CommonResult.success(count);
-        }else {
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation(value = "批量修改显示状态")
+    @PostMapping("/update/showStatus")
+    public CommonResult updateShowStatus(@RequestParam List<Long> ids, @RequestParam Integer showStatus) {
+        ArrayList<PmsBrand> brands = new ArrayList<>();
+        for (Long id : ids) {
+            PmsBrand brand = new PmsBrand();
+            brand.setId(id);
+            brand.setShowStatus(showStatus);
+            brands.add(brand);
+        }
+        boolean flag = brandService.updateBatchById(brands);
+        if (flag) {
+            return CommonResult.success(flag);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation(value = "批量修改厂家制造状态")
+    @PostMapping("/update/factoryStatus")
+    public CommonResult updateFactoryStatus(@RequestParam List<Long> ids, @RequestParam Integer factoryStatus) {
+        ArrayList<PmsBrand> brands = new ArrayList<>();
+        for (Long id : ids) {
+            PmsBrand brand = new PmsBrand();
+            brand.setId(id);
+            brand.setShowStatus(factoryStatus);
+            brands.add(brand);
+        }
+        boolean flag = brandService.updateBatchById(brands);
+        if (flag) {
+            return CommonResult.success(flag);
+        } else {
             return CommonResult.failed();
         }
     }
