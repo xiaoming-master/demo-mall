@@ -1,7 +1,10 @@
 package com.ming.mall.mapper;
 
-import com.ming.mall.model.PmsProductFullReduction;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ming.mall.model.PmsProductFullReduction;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PmsProductFullReductionMapper extends BaseMapper<PmsProductFullReduction> {
 
+    /**
+     * 批量插入
+     *
+     * @param productFullReductionList
+     */
+    void insertList(@Param(value = "productFullReductionList") List<PmsProductFullReduction> productFullReductionList);
 }

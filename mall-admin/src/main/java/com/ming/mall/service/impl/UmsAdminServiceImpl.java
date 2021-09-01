@@ -81,7 +81,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         //如果缓存中没有就在数据库中找
         if (admin == null) {
             List<UmsAdmin> admins = list(new QueryWrapper<UmsAdmin>().eq("username", username));
-            if (!CollUtil.isEmpty(admins) || !(admins.size() > 0)) {
+            if (CollUtil.isNotEmpty(admins)) {
                 admin = admins.get(0);
                 //放入redis
                 adminCacheService.setAdmin(admin);

@@ -4,16 +4,28 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsMemberPrice">
-        <id column="id" property="id" />
-        <result column="product_id" property="productId" />
-        <result column="member_level_id" property="memberLevelId" />
-        <result column="member_price" property="memberPrice" />
-        <result column="member_level_name" property="memberLevelName" />
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="member_level_id" property="memberLevelId"/>
+        <result column="member_price" property="memberPrice"/>
+        <result column="member_level_name" property="memberLevelName"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, product_id, member_level_id, member_price, member_level_name
     </sql>
+
+    <!--    批量插入商品会员价格-->
+    <insert id="insertList">
+        insert into pms_member_price(product_id, member_level_id, member_price, member_level_name)
+        values
+        <foreach collection="memberPriceList" item="memberPrice" separator=",">
+            (#{memberPrice.productId},
+            #{memberPrice.memberLevelId},
+            #{memberPrice.memberPrice},
+            #{memberPrice.memberLevelName})
+        </foreach>
+    </insert>
 
 </mapper>

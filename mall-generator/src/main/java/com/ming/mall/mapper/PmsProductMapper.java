@@ -2,6 +2,7 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.PmsProduct;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PmsProductMapper extends BaseMapper<PmsProduct> {
 
+    /**
+     * 根据id获取商品信息
+     * @param productId
+     * @return
+     */
+    PmsProduct getProductById(@Param(value = "productId") Long productId);
 }

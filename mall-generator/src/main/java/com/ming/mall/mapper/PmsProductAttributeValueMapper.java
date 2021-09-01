@@ -2,6 +2,9 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.PmsProductAttributeValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PmsProductAttributeValueMapper extends BaseMapper<PmsProductAttributeValue> {
 
+    /**
+     * 批量插入产品参数信息
+     * @param productAttributeValueList
+     */
+    void insertList(@Param(value = "productAttributeValueList") List<PmsProductAttributeValue> productAttributeValueList);
 }

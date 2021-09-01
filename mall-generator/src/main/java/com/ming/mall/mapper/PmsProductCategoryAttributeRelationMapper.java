@@ -2,6 +2,9 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.PmsProductCategoryAttributeRelation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PmsProductCategoryAttributeRelationMapper extends BaseMapper<PmsProductCategoryAttributeRelation> {
 
+    /**
+     * 批量插入分类与属性的关系
+     * @param categoryId
+     * @param attributeIdList
+     */
+    int addAllRelations(@Param(value = "categoryId") Long categoryId,@Param(value = "attributeIdList") List<Long> attributeIdList);
 }

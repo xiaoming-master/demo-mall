@@ -4,16 +4,28 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProductLadder">
-        <id column="id" property="id" />
-        <result column="product_id" property="productId" />
-        <result column="count" property="count" />
-        <result column="discount" property="discount" />
-        <result column="price" property="price" />
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="price" property="price"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, product_id, count, discount, price
     </sql>
+
+    <!--    批量插入产品阶梯价格-->
+    <insert id="insertList">
+        insert into pms_product_ladder(product_id, count, discount, price)
+        values
+        <foreach collection="productLadderList" item="ladder" separator=",">
+            (#{ladder.productId},
+            #{ladder.count},
+            #{ladder.discount},
+            #{ladder.price})
+        </foreach>
+    </insert>
 
 </mapper>

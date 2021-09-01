@@ -122,8 +122,8 @@ public class UmsAdminController {
     @ApiOperation(value = "通过用户名或昵称查找用户")
     @GetMapping("/list")
     public CommonResult getAdminByName(@RequestParam(required = false) String keyword,
-                                       @RequestParam Integer pageNum,
-                                       @RequestParam Integer pageSize) {
+                                       @RequestParam(defaultValue = "1") Integer pageNum,
+                                       @RequestParam(defaultValue = "5") Integer pageSize) {
         List<UmsAdmin> admins = adminService.getAdminByName(keyword, pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(admins));
     }

@@ -4,53 +4,161 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProduct">
-        <id column="id" property="id" />
-        <result column="brand_id" property="brandId" />
-        <result column="product_category_id" property="productCategoryId" />
-        <result column="feight_template_id" property="feightTemplateId" />
-        <result column="product_attribute_category_id" property="productAttributeCategoryId" />
-        <result column="name" property="name" />
-        <result column="pic" property="pic" />
-        <result column="product_sn" property="productSn" />
-        <result column="delete_status" property="deleteStatus" />
-        <result column="publish_status" property="publishStatus" />
-        <result column="new_status" property="newStatus" />
-        <result column="recommand_status" property="recommandStatus" />
-        <result column="verify_status" property="verifyStatus" />
-        <result column="sort" property="sort" />
-        <result column="sale" property="sale" />
-        <result column="price" property="price" />
-        <result column="promotion_price" property="promotionPrice" />
-        <result column="gift_growth" property="giftGrowth" />
-        <result column="gift_point" property="giftPoint" />
-        <result column="use_point_limit" property="usePointLimit" />
-        <result column="sub_title" property="subTitle" />
-        <result column="description" property="description" />
-        <result column="original_price" property="originalPrice" />
-        <result column="stock" property="stock" />
-        <result column="low_stock" property="lowStock" />
-        <result column="unit" property="unit" />
-        <result column="weight" property="weight" />
-        <result column="preview_status" property="previewStatus" />
-        <result column="service_ids" property="serviceIds" />
-        <result column="keywords" property="keywords" />
-        <result column="note" property="note" />
-        <result column="album_pics" property="albumPics" />
-        <result column="detail_title" property="detailTitle" />
-        <result column="detail_desc" property="detailDesc" />
-        <result column="detail_html" property="detailHtml" />
-        <result column="detail_mobile_html" property="detailMobileHtml" />
-        <result column="promotion_start_time" property="promotionStartTime" />
-        <result column="promotion_end_time" property="promotionEndTime" />
-        <result column="promotion_per_limit" property="promotionPerLimit" />
-        <result column="promotion_type" property="promotionType" />
-        <result column="brand_name" property="brandName" />
-        <result column="product_category_name" property="productCategoryName" />
+        <id column="id" property="id"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="product_category_id" property="productCategoryId"/>
+        <result column="feight_template_id" property="feightTemplateId"/>
+        <result column="product_attribute_category_id" property="productAttributeCategoryId"/>
+        <result column="name" property="name"/>
+        <result column="pic" property="pic"/>
+        <result column="product_sn" property="productSn"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="publish_status" property="publishStatus"/>
+        <result column="new_status" property="newStatus"/>
+        <result column="recommand_status" property="recommandStatus"/>
+        <result column="verify_status" property="verifyStatus"/>
+        <result column="sort" property="sort"/>
+        <result column="sale" property="sale"/>
+        <result column="price" property="price"/>
+        <result column="promotion_price" property="promotionPrice"/>
+        <result column="gift_growth" property="giftGrowth"/>
+        <result column="gift_point" property="giftPoint"/>
+        <result column="use_point_limit" property="usePointLimit"/>
+        <result column="sub_title" property="subTitle"/>
+        <result column="description" property="description"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="stock" property="stock"/>
+        <result column="low_stock" property="lowStock"/>
+        <result column="unit" property="unit"/>
+        <result column="weight" property="weight"/>
+        <result column="preview_status" property="previewStatus"/>
+        <result column="service_ids" property="serviceIds"/>
+        <result column="keywords" property="keywords"/>
+        <result column="note" property="note"/>
+        <result column="album_pics" property="albumPics"/>
+        <result column="detail_title" property="detailTitle"/>
+        <result column="detail_desc" property="detailDesc"/>
+        <result column="detail_html" property="detailHtml"/>
+        <result column="detail_mobile_html" property="detailMobileHtml"/>
+        <result column="promotion_start_time" property="promotionStartTime"/>
+        <result column="promotion_end_time" property="promotionEndTime"/>
+        <result column="promotion_per_limit" property="promotionPerLimit"/>
+        <result column="promotion_type" property="promotionType"/>
+        <result column="brand_name" property="brandName"/>
+        <result column="product_category_name" property="productCategoryName"/>
+    </resultMap>
+
+    <resultMap id="productInfo" type="com.ming.mall.dto.PmsProductResult" extends="BaseResultMap">
+        <result column="cate_parent_id" property="cateParentId"/>
+        <collection property="memberPriceList" ofType="com.ming.mall.model.PmsMemberPrice" columnPrefix="member_"
+                    resultMap="com.ming.mall.mapper.PmsMemberPriceMapper.BaseResultMap"/>
+        <collection property="productAttributeValueList" ofType="com.ming.mall.model.PmsProductAttributeValue"
+                    columnPrefix="attribute_"
+                    resultMap="com.ming.mall.mapper.PmsProductAttributeValueMapper.BaseResultMap"/>
+        <collection property="productFullReductionList" ofType="com.ming.mall.model.PmsProductFullReduction"
+                    columnPrefix="full_"
+                    resultMap="com.ming.mall.mapper.PmsProductFullReductionMapper.BaseResultMap"/>
+        <collection property="productLadderList" ofType="com.ming.mall.model.PmsProductLadder" columnPrefix="ladder_"
+                    resultMap="com.ming.mall.mapper.PmsProductLadderMapper.BaseResultMap"/>
+        <collection property="skuStockList" ofType="com.ming.mall.model.PmsSkuStock" columnPrefix="sku_"
+                    resultMap="com.ming.mall.mapper.PmsSkuStockMapper.BaseResultMap"/>
+        <collection property="subjectProductRelationList"
+                    ofType="com.ming.mall.model.CmsSubjectProductRelation"
+                    column="id"
+                    select="com.ming.mall.mapper.CmsSubjectProductRelationMapper.getSubjectProductRelationByProductId"/>
+        <collection property="prefrenceAreaProductRelationList"
+                    ofType="com.ming.mall.model.CmsPrefrenceAreaProductRelation"
+                    column="id"
+                    select="com.ming.mall.mapper.CmsPrefrenceAreaProductRelationMapper.getPrefrenceAreaProductRelationByProductId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, brand_id, product_category_id, feight_template_id, product_attribute_category_id, name, pic, product_sn, delete_status, publish_status, new_status, recommand_status, verify_status, sort, sale, price, promotion_price, gift_growth, gift_point, use_point_limit, sub_title, description, original_price, stock, low_stock, unit, weight, preview_status, service_ids, keywords, note, album_pics, detail_title, detail_desc, detail_html, detail_mobile_html, promotion_start_time, promotion_end_time, promotion_per_limit, promotion_type, brand_name, product_category_name
     </sql>
+
+    <!--    根据id获取商品id-->
+    <select id="getProductById" resultMap="productInfo">
+        select p.id                            id,
+               p.brand_id                      brand_id,
+               p.product_category_id           product_category_id,
+               p.feight_template_id            feight_template_id,
+               p.product_attribute_category_id product_attribute_category_id,
+               p.name                          name,
+               p.pic                           pic,
+               p.product_sn                    product_sn,
+               p.delete_status                 delete_status,
+               p.publish_status                publish_status,
+               p.new_status                    new_status,
+               p.recommand_status              recommand_status,
+               p.verify_status                 verify_status,
+               p.sort                          sort,
+               p.sale                          sale,
+               p.price                         price,
+               p.promotion_price               promotion_price,
+               p.gift_growth                   gift_growth,
+               p.gift_point                    gift_point,
+               p.use_point_limit               use_point_limit,
+               p.sub_title                     sub_title,
+               p.description                   description,
+               p.original_price                original_price,
+               p.stock                         stock,
+               p.low_stock                     low_stock,
+               p.unit                          unit,
+               p.weight                        weight,
+               p.preview_status                preview_status,
+               p.service_ids                   service_ids,
+               p.keywords                      keywords,
+               p.note                          note,
+               p.album_pics                    album_pics,
+               p.detail_title                  detail_title,
+               p.detail_desc                   detail_desc,
+               p.detail_html                   detail_html,
+               p.detail_mobile_html            detail_mobile_html,
+               p.promotion_start_time          promotion_start_time,
+               p.promotion_end_time            promotion_end_time,
+               p.promotion_per_limit           promotion_per_limit,
+               p.promotion_type                promotion_type,
+               p.brand_name                    brand_name,
+               p.product_category_name         product_category_name,
+               pc.parent_id                    cate_parent_id,
+               mp.id                           member_id,
+               mp.product_id                   menber_product_id,
+               mp.member_level_id              menber_member_level_id,
+               mp.member_price                 member_member_price,
+               mp.member_level_name            member_member_level_name,
+               pav.id                          attribute_id,
+               pav.product_id                  attribute_product_id,
+               pav.product_attribute_id        attribute_product_attribute_id,
+               pav.value                       attribute_value,
+               pfr.id                          full_id,
+               pfr.product_id                  full_product_id,
+               pfr.full_price                  full_full_price,
+               pfr.reduce_price                full_reduce_price,
+               pl.id                           ladder_id,
+               pl.product_id                   ladder_product_id,
+               pl.count                        ladder_count,
+               pl.discount                     ladder_discount,
+               pl.price                        ladder_price,
+               ss.id                           sku_id,
+               ss.product_id                   sku_product_id,
+               ss.sku_code                     sku_sku_code,
+               ss.price                        sku_price,
+               ss.stock                        sku_stock,
+               ss.low_stock                    sku_low_stock,
+               ss.pic                          sku_pic,
+               ss.sale                         sku_sale,
+               ss.promotion_price              sku_promotion_price,
+               ss.lock_stock                   sku_lock_stock,
+               ss.sp_data                      sku_sp_data
+        from pms_product p
+                 left join pms_product_category pc on pc.id = p.product_category_id
+                 left join pms_member_price mp on p.id = mp.product_id
+                 left join pms_product_attribute_value pav on p.id = pav.product_id
+                 left join pms_product_full_reduction pfr on p.id = pfr.product_id
+                 left join pms_product_ladder pl on p.id = pl.product_id
+                 left join pms_sku_stock ss on p.id = ss.product_id
+        where p.id = #{productId}
+    </select>
 
 </mapper>

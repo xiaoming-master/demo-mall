@@ -4,15 +4,26 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProductFullReduction">
-        <id column="id" property="id" />
-        <result column="product_id" property="productId" />
-        <result column="full_price" property="fullPrice" />
-        <result column="reduce_price" property="reducePrice" />
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="full_price" property="fullPrice"/>
+        <result column="reduce_price" property="reducePrice"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, product_id, full_price, reduce_price
     </sql>
+
+    <!--    批量插入-->
+    <insert id="insertList">
+        insert into pms_product_full_reduction(product_id, full_price, reduce_price)
+        values
+        <foreach collection="productFullReductionList" item="fullReduction" separator=",">
+            (#{fullReduction.productId},
+            #{fullReduction.fullPrice},
+            #{fullReduction.reducePrice})
+        </foreach>
+    </insert>
 
 </mapper>

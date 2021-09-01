@@ -4,14 +4,23 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProductCategoryAttributeRelation">
-        <id column="id" property="id" />
-        <result column="product_category_id" property="productCategoryId" />
-        <result column="product_attribute_id" property="productAttributeId" />
+        <id column="id" property="id"/>
+        <result column="product_category_id" property="productCategoryId"/>
+        <result column="product_attribute_id" property="productAttributeId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, product_category_id, product_attribute_id
     </sql>
+
+    <!--    批量插入分类与属性的关系-->
+    <insert id="addAllRelations">
+        insert into pms_product_category_attribute_relation (product_category_id, product_attribute_id)
+        values
+        <foreach collection="attributeIdList" item="attributeId" separator=",">
+            (#{categoryId},#{attributeId})
+        </foreach>
+    </insert>
 
 </mapper>

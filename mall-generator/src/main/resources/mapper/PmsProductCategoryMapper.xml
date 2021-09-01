@@ -4,23 +4,37 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProductCategory">
-        <id column="id" property="id" />
-        <result column="parent_id" property="parentId" />
-        <result column="name" property="name" />
-        <result column="level" property="level" />
-        <result column="product_count" property="productCount" />
-        <result column="product_unit" property="productUnit" />
-        <result column="nav_status" property="navStatus" />
-        <result column="show_status" property="showStatus" />
-        <result column="sort" property="sort" />
-        <result column="icon" property="icon" />
-        <result column="keywords" property="keywords" />
-        <result column="description" property="description" />
+        <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="name" property="name"/>
+        <result column="level" property="level"/>
+        <result column="product_count" property="productCount"/>
+        <result column="product_unit" property="productUnit"/>
+        <result column="nav_status" property="navStatus"/>
+        <result column="show_status" property="showStatus"/>
+        <result column="sort" property="sort"/>
+        <result column="icon" property="icon"/>
+        <result column="keywords" property="keywords"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <resultMap id="ProductCategoryWithChildren" type="com.ming.mall.dto.PmsProductCategoryNode"
+               extends="BaseResultMap">
+        <collection property="children" ofType="com.ming.mall.dto.PmsProductCategoryNode" column="id"
+                    select="getProductCategoryWithChildren"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, parent_id, name, level, product_count, product_unit, nav_status, show_status, sort, icon, keywords, description
     </sql>
+
+    <!--    获取商品分类及其子分类-->
+    <select id="getProductCategoryWithChildren" resultMap="ProductCategoryWithChildren">
+        select
+        <include refid="Base_Column_List"/>
+        from pms_product_category
+        where parent_id = #{parentId}
+    </select>
 
 </mapper>

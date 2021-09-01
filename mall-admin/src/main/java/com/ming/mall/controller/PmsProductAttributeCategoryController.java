@@ -93,8 +93,6 @@ public class PmsProductAttributeCategoryController {
         } else {
             return CommonResult.failed();
         }
-
-
     }
 
 }

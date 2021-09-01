@@ -4,15 +4,26 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.PmsProductAttributeValue">
-        <id column="id" property="id" />
-        <result column="product_id" property="productId" />
-        <result column="product_attribute_id" property="productAttributeId" />
-        <result column="value" property="value" />
+        <id column="id" property="id"/>
+        <result column="product_id" property="productId"/>
+        <result column="product_attribute_id" property="productAttributeId"/>
+        <result column="value" property="value"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, product_id, product_attribute_id, value
     </sql>
+
+    <!--    批量插入产品参数信息-->
+    <insert id="insertList">
+        insert into pms_product_attribute_value(product_id, product_attribute_id, value)
+        values
+        <foreach collection="productAttributeValueList" item="attributeValue" separator=",">
+            (#{attributeValue.productId},
+            #{attributeValue.productAttributeId},
+            #{attributeValue.value})
+        </foreach>
+    </insert>
 
 </mapper>

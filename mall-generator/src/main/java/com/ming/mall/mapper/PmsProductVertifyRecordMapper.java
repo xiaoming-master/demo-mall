@@ -2,6 +2,9 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.PmsProductVertifyRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface PmsProductVertifyRecordMapper extends BaseMapper<PmsProductVertifyRecord> {
 
+    /**
+     * 批量修改审核状态
+     * @param record
+     * @param ids
+     * @return
+     */
+    int insertList(@Param(value = "record") PmsProductVertifyRecord record,@Param(value = "ids") List<Long> ids);
 }

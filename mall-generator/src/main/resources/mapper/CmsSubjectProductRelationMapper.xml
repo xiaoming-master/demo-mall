@@ -4,14 +4,30 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.CmsSubjectProductRelation">
-        <id column="id" property="id" />
-        <result column="subject_id" property="subjectId" />
-        <result column="product_id" property="productId" />
+        <id column="id" property="id"/>
+        <result column="subject_id" property="subjectId"/>
+        <result column="product_id" property="productId"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, subject_id, product_id
     </sql>
+
+    <!--    批量插入-->
+    <insert id="insertList">
+        insert into cms_subject_product_relation(subject_id, product_id)
+        values
+        <foreach collection="subjectProductRelationList" item="relation" separator=",">
+            (#{relation.subjectId},#{relation.productId})
+        </foreach>
+    </insert>
+
+    <select id="getSubjectProductRelationByProductId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cms_subject_product_relation
+        where product_id=#{productId}
+    </select>
 
 </mapper>

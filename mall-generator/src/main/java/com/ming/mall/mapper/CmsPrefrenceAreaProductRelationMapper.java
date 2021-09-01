@@ -2,6 +2,9 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.CmsPrefrenceAreaProductRelation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CmsPrefrenceAreaProductRelationMapper extends BaseMapper<CmsPrefrenceAreaProductRelation> {
 
+    /**
+     * 批量插入优选产品关系
+     *
+     * @param prefrenceAreaProductRelationList
+     */
+    void insertList(@Param(value = "prefrenceAreaProductRelationList") List<CmsPrefrenceAreaProductRelation> prefrenceAreaProductRelationList);
+
+    CmsPrefrenceAreaProductRelation getPrefrenceAreaProductRelationByProductId(@Param(value = "productId") Long productId);
 }
