@@ -4,16 +4,32 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.SmsCouponProductCategoryRelation">
-        <id column="id" property="id" />
-        <result column="coupon_id" property="couponId" />
-        <result column="product_category_id" property="productCategoryId" />
-        <result column="product_category_name" property="productCategoryName" />
-        <result column="parent_category_name" property="parentCategoryName" />
+        <id column="id" property="id"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="product_category_id" property="productCategoryId"/>
+        <result column="product_category_name" property="productCategoryName"/>
+        <result column="parent_category_name" property="parentCategoryName"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, coupon_id, product_category_id, product_category_name, parent_category_name
     </sql>
+
+    <!--    批量插入-->
+    <insert id="insertList">
+        insert into sms_coupon_product_category_relation
+        (coupon_id,
+        product_category_id,
+        product_category_name,
+        parent_category_name)
+        values
+        <foreach collection="productCategoryRelationList" item="relation" separator=",">
+            (#{relation.couponId},
+            #{relation.productCategoryId},
+            #{relation.productCategoryName},
+            #{relation.parentCategoryName})
+        </foreach>
+    </insert>
 
 </mapper>

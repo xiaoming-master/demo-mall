@@ -4,17 +4,31 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.SmsFlashPromotionSession">
-        <id column="id" property="id" />
-        <result column="name" property="name" />
-        <result column="start_time" property="startTime" />
-        <result column="end_time" property="endTime" />
-        <result column="status" property="status" />
-        <result column="create_time" property="createTime" />
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="FlashPromotionSessionAndProductCountMap" type="com.ming.mall.dto.SmsFlashPromotionSessionDetail"
+               extends="BaseResultMap">
+        <association property="productCount" javaType="java.lang.Long"
+                     column="{promotionId=flashPromotionId,promotionSessionId=id}"
+                     select="com.ming.mall.mapper.SmsFlashPromotionProductRelationMapper.getProductCount"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, start_time, end_time, status, create_time
     </sql>
+
+    <!--    根据活动id获取全部场次以及商品的数量-->
+    <select id="getFlashPromotionSessionAndProductCount"
+            resultMap="FlashPromotionSessionAndProductCountMap">
+        select<include refid="Base_Column_List"/>, #{flashPromotionId} as flashPromotionId
+        from sms_flash_promotion_session fps where fps.status=1
+    </select>
 
 </mapper>

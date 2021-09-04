@@ -24,7 +24,7 @@ import java.util.List;
  * @author ming
  * @since 2021-08-18
  */
-@Api(tags = "SmsHomeNewProductController", value = "首页新品推荐")
+@Api(tags = "SmsHomeNewProductController", description = "首页新品推荐")
 @RestController
 @RequestMapping("/home/newProduct")
 public class SmsHomeNewProductController {

@@ -4,19 +4,56 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.SmsFlashPromotionProductRelation">
-        <id column="id" property="id" />
-        <result column="flash_promotion_id" property="flashPromotionId" />
-        <result column="flash_promotion_session_id" property="flashPromotionSessionId" />
-        <result column="product_id" property="productId" />
-        <result column="flash_promotion_price" property="flashPromotionPrice" />
-        <result column="flash_promotion_count" property="flashPromotionCount" />
-        <result column="flash_promotion_limit" property="flashPromotionLimit" />
-        <result column="sort" property="sort" />
+        <id column="id" property="id"/>
+        <result column="flash_promotion_id" property="flashPromotionId"/>
+        <result column="flash_promotion_session_id" property="flashPromotionSessionId"/>
+        <result column="product_id" property="productId"/>
+        <result column="flash_promotion_price" property="flashPromotionPrice"/>
+        <result column="flash_promotion_count" property="flashPromotionCount"/>
+        <result column="flash_promotion_limit" property="flashPromotionLimit"/>
+        <result column="sort" property="sort"/>
+    </resultMap>
+
+    <resultMap id="flashPromotionProductRElationMap" extends="BaseResultMap"
+               type="com.ming.mall.dto.SmsFlashPromotionProductRelationDetail">
+        <association property="product" javaType="com.ming.mall.model.PmsProduct"
+                     resultMap="com.ming.mall.mapper.PmsProductMapper.BaseResultMap" columnPrefix="product_"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, flash_promotion_id, flash_promotion_session_id, product_id, flash_promotion_price, flash_promotion_count, flash_promotion_limit, sort
     </sql>
+
+    <!--    获取商品总数-->
+    <select id="getProductCount" resultType="java.lang.Long">
+        select count(*)
+        from sms_flash_promotion_product_relation
+        where flash_promotion_id = #{promotionId}
+          and flash_promotion_session_id = #{promotionSessionId};
+    </select>
+
+    <!--    分页查询不同场次关联及商品信息-->
+    <select id="getFlashPromotionSession"
+            resultMap="flashPromotionProductRElationMap">
+        SELECT p.id                            product_id,
+               p.name                          product_name,
+               p.product_sn                    product_product_sn,
+               p.price                         product_price,
+               p.stock                         product_stock,
+               fppr.id                         id,
+               fppr.flash_promotion_id         flash_promotion_id,
+               fppr.flash_promotion_session_id flash_promotion_session_id,
+               fppr.product_id                 product_id,
+               fppr.flash_promotion_price      flash_promotion_price,
+               fppr.flash_promotion_count      flash_promotion_count,
+               fppr.flash_promotion_limit      flash_promotion_limit,
+               fppr.sort                       sort
+        FROM sms_flash_promotion_product_relation fppr
+                 LEFT JOIN pms_product p ON fppr.product_id = p.id
+        WHERE fppr.flash_promotion_id = #{flashPromotionId}
+          AND fppr.flash_promotion_session_id = #{flashPromotionSessionId}
+        ORDER BY fppr.sort DESC
+    </select>
 
 </mapper>

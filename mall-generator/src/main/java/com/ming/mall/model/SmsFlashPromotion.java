@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,16 +33,16 @@ public class SmsFlashPromotion implements Serializable {
     private String title;
 
     @ApiModelProperty(value = "开始日期")
-    private LocalDate startDate;
+    private Date startDate;
 
     @ApiModelProperty(value = "结束日期")
-    private LocalDate endDate;
+    private Date endDate;
 
     @ApiModelProperty(value = "上下线状态")
     private Integer status;
 
     @ApiModelProperty(value = "秒杀时间段名称")
-    private LocalDateTime createTime;
+    private Date createTime;
 
 
 }

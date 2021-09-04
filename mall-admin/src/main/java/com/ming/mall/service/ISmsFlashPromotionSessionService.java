@@ -1,7 +1,10 @@
 package com.ming.mall.service;
 
+import com.ming.mall.dto.SmsFlashPromotionSessionDetail;
 import com.ming.mall.model.SmsFlashPromotionSession;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISmsFlashPromotionSessionService extends IService<SmsFlashPromotionSession> {
 
+
+    /**
+     * 根据活动id获取全部场次以及商品的数量
+     * @param flashPromotionId
+     * @return
+     */
+    List<SmsFlashPromotionSessionDetail> getFlashPromotionSessionAndProductCount(Long flashPromotionId);
 }

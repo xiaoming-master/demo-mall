@@ -6,7 +6,10 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,7 +23,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="UmsAdmin对象", description="后台用户表")
+@ApiModel(value = "UmsAdmin对象", description = "后台用户表")
 public class UmsAdmin implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,17 +31,22 @@ public class UmsAdmin implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @NotEmpty
     private String username;
 
+    @NotEmpty
     private String password;
 
     @ApiModelProperty(value = "头像")
+    @URL
     private String icon;
 
     @ApiModelProperty(value = "邮箱")
+    @Email
     private String email;
 
     @ApiModelProperty(value = "昵称")
+    @NotEmpty
     private String nickName;
 
     @ApiModelProperty(value = "备注信息")

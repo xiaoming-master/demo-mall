@@ -39,6 +39,7 @@ public class SmsFlashPromotionProductRelation implements Serializable {
     private BigDecimal flashPromotionPrice;
 
     @ApiModelProperty(value = "限时购数量")
+
     private Integer flashPromotionCount;
 
     @ApiModelProperty(value = "每人限购数量")

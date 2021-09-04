@@ -2,6 +2,9 @@ package com.ming.mall.mapper;
 
 import com.ming.mall.model.SmsCouponProductCategoryRelation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SmsCouponProductCategoryRelationMapper extends BaseMapper<SmsCouponProductCategoryRelation> {
 
+    /**
+     * 批量插入
+     * @param productCategoryRelationList
+     * @return
+     */
+    int insertList(@Param(value = "productCategoryRelationList") List<SmsCouponProductCategoryRelation> productCategoryRelationList);
 }
