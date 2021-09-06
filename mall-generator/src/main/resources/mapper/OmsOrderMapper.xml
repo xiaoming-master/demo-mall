@@ -4,55 +4,141 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.OmsOrder">
-        <id column="id" property="id" />
-        <result column="member_id" property="memberId" />
-        <result column="coupon_id" property="couponId" />
-        <result column="order_sn" property="orderSn" />
-        <result column="create_time" property="createTime" />
-        <result column="member_username" property="memberUsername" />
-        <result column="total_amount" property="totalAmount" />
-        <result column="pay_amount" property="payAmount" />
-        <result column="freight_amount" property="freightAmount" />
-        <result column="promotion_amount" property="promotionAmount" />
-        <result column="integration_amount" property="integrationAmount" />
-        <result column="coupon_amount" property="couponAmount" />
-        <result column="discount_amount" property="discountAmount" />
-        <result column="pay_type" property="payType" />
-        <result column="source_type" property="sourceType" />
-        <result column="status" property="status" />
-        <result column="order_type" property="orderType" />
-        <result column="delivery_company" property="deliveryCompany" />
-        <result column="delivery_sn" property="deliverySn" />
-        <result column="auto_confirm_day" property="autoConfirmDay" />
-        <result column="integration" property="integration" />
-        <result column="growth" property="growth" />
-        <result column="promotion_info" property="promotionInfo" />
-        <result column="bill_type" property="billType" />
-        <result column="bill_header" property="billHeader" />
-        <result column="bill_content" property="billContent" />
-        <result column="bill_receiver_phone" property="billReceiverPhone" />
-        <result column="bill_receiver_email" property="billReceiverEmail" />
-        <result column="receiver_name" property="receiverName" />
-        <result column="receiver_phone" property="receiverPhone" />
-        <result column="receiver_post_code" property="receiverPostCode" />
-        <result column="receiver_province" property="receiverProvince" />
-        <result column="receiver_city" property="receiverCity" />
-        <result column="receiver_region" property="receiverRegion" />
-        <result column="receiver_detail_address" property="receiverDetailAddress" />
-        <result column="note" property="note" />
-        <result column="confirm_status" property="confirmStatus" />
-        <result column="delete_status" property="deleteStatus" />
-        <result column="use_integration" property="useIntegration" />
-        <result column="payment_time" property="paymentTime" />
-        <result column="delivery_time" property="deliveryTime" />
-        <result column="receive_time" property="receiveTime" />
-        <result column="comment_time" property="commentTime" />
-        <result column="modify_time" property="modifyTime" />
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="order_sn" property="orderSn"/>
+        <result column="create_time" property="createTime"/>
+        <result column="member_username" property="memberUsername"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="pay_amount" property="payAmount"/>
+        <result column="freight_amount" property="freightAmount"/>
+        <result column="promotion_amount" property="promotionAmount"/>
+        <result column="integration_amount" property="integrationAmount"/>
+        <result column="coupon_amount" property="couponAmount"/>
+        <result column="discount_amount" property="discountAmount"/>
+        <result column="pay_type" property="payType"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="status" property="status"/>
+        <result column="order_type" property="orderType"/>
+        <result column="delivery_company" property="deliveryCompany"/>
+        <result column="delivery_sn" property="deliverySn"/>
+        <result column="auto_confirm_day" property="autoConfirmDay"/>
+        <result column="integration" property="integration"/>
+        <result column="growth" property="growth"/>
+        <result column="promotion_info" property="promotionInfo"/>
+        <result column="bill_type" property="billType"/>
+        <result column="bill_header" property="billHeader"/>
+        <result column="bill_content" property="billContent"/>
+        <result column="bill_receiver_phone" property="billReceiverPhone"/>
+        <result column="bill_receiver_email" property="billReceiverEmail"/>
+        <result column="receiver_name" property="receiverName"/>
+        <result column="receiver_phone" property="receiverPhone"/>
+        <result column="receiver_post_code" property="receiverPostCode"/>
+        <result column="receiver_province" property="receiverProvince"/>
+        <result column="receiver_city" property="receiverCity"/>
+        <result column="receiver_region" property="receiverRegion"/>
+        <result column="receiver_detail_address" property="receiverDetailAddress"/>
+        <result column="note" property="note"/>
+        <result column="confirm_status" property="confirmStatus"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="use_integration" property="useIntegration"/>
+        <result column="payment_time" property="paymentTime"/>
+        <result column="delivery_time" property="deliveryTime"/>
+        <result column="receive_time" property="receiveTime"/>
+        <result column="comment_time" property="commentTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <resultMap id="orderDetailMap" type="com.ming.mall.dto.OmsOrderDetail" extends="BaseResultMap">
+        <collection property="orderItemList" ofType="com.ming.mall.model.OmsOrderItem"
+                    resultMap="com.ming.mall.mapper.OmsOrderItemMapper.BaseResultMap" columnPrefix="item_"/>
+        <collection property="historyList" ofType="com.ming.mall.model.OmsOrderOperateHistory" columnPrefix="history_"
+                    resultMap="com.ming.mall.mapper.OmsOrderOperateHistoryMapper.BaseResultMap"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, member_id, coupon_id, order_sn, create_time, member_username, total_amount, pay_amount, freight_amount, promotion_amount, integration_amount, coupon_amount, discount_amount, pay_type, source_type, status, order_type, delivery_company, delivery_sn, auto_confirm_day, integration, growth, promotion_info, bill_type, bill_header, bill_content, bill_receiver_phone, bill_receiver_email, receiver_name, receiver_phone, receiver_post_code, receiver_province, receiver_city, receiver_region, receiver_detail_address, note, confirm_status, delete_status, use_integration, payment_time, delivery_time, receive_time, comment_time, modify_time
     </sql>
+
+    <!--    根据订单id获取订单信息-->
+    <select id="getOrderById" resultMap="orderDetailMap">
+        SELECT o.id                      id,
+               o.member_id               member_id,
+               o.coupon_id               coupon_id,
+               o.order_sn                order_sn,
+               o.create_time             create_time,
+               o.member_username         member_username,
+               o.total_amount            total_amount,
+               o.pay_amount              pay_amount,
+               o.freight_amount          freight_amount,
+               o.promotion_amount        promotion_amount,
+               o.integration_amount      integration_amount,
+               o.coupon_amount           coupon_amount,
+               o.discount_amount         discount_amount,
+               o.pay_type                pay_type,
+               o.source_type             source_type,
+               o.status                  status,
+               o.order_type              order_type,
+               o.delivery_company        delivery_company,
+               o.delivery_sn             delivery_sn,
+               o.auto_confirm_day        auto_confirm_day,
+               o.integration             integration,
+               o.growth                  growth,
+               o.promotion_info          promotion_info,
+               o.bill_type               bill_type,
+               o.bill_header             bill_header,
+               o.bill_content            bill_content,
+               o.bill_receiver_phone     bill_receiver_phone,
+               o.bill_receiver_email     bill_receiver_email,
+               o.receiver_name           receiver_name,
+               o.receiver_phone          receiver_phone,
+               o.receiver_post_code      receiver_post_code,
+               o.receiver_province       receiver_province,
+               o.receiver_city           receiver_city,
+               o.receiver_region         receiver_region,
+               o.receiver_detail_address receiver_detail_address,
+               o.note                    note,
+               o.confirm_status          confirm_status,
+               o.delete_status           delete_status,
+               o.use_integration         use_integration,
+               o.payment_time            payment_time,
+               o.delivery_time           delivery_time,
+               o.receive_time            receive_time,
+               o.comment_time            comment_time,
+               o.modify_time             modify_time,
+               oi.id                     item_id,
+               oi.order_id               item_order_id,
+               oi.order_sn               item_order_sn,
+               oi.product_id             item_product_id,
+               oi.product_pic            item_product_pic,
+               oi.product_name           item_product_name,
+               oi.product_brand          item_product_brand,
+               oi.product_sn             item_product_sn,
+               oi.product_price          item_product_price,
+               oi.product_quantity       item_product_quantity,
+               oi.product_sku_id         item_product_sku_id,
+               oi.product_sku_code       item_product_sku_code,
+               oi.product_category_id    item_product_category_id,
+               oi.promotion_name         item_promotion_name,
+               oi.promotion_amount       item_promotion_amount,
+               oi.coupon_amount          item_coupon_amount,
+               oi.integration_amount     item_integration_amount,
+               oi.real_amount            item_real_amount,
+               oi.gift_integration       item_gift_integration,
+               oi.gift_growth            item_gift_growth,
+               oi.product_attr           item_product_attr,
+               ooh.id                    history_id,
+               ooh.order_id              history_order_id,
+               ooh.operate_man           history_operate_man,
+               ooh.create_time           history_create_time,
+               ooh.order_status          history_order_status,
+               ooh.note                  history_note
+        FROM oms_order o
+                 LEFT JOIN oms_order_item oi ON oi.order_id = o.id
+                 LEFT JOIN oms_order_operate_history ooh ON ooh.order_id = o.id
+        WHERE o.id = #{orderId}
+    </select>
 
 </mapper>

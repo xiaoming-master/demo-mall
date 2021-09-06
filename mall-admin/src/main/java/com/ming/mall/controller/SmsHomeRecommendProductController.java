@@ -24,7 +24,7 @@ import java.util.List;
  * @author ming
  * @since 2021-08-18
  */
-@Api(tags = "SmsHomeRecommendProductController", value = "首页人气推荐")
+@Api(tags = "SmsHomeRecommendProductController", description = "首页人气推荐")
 @RestController
 @RequestMapping("/home/recommendProduct")
 public class SmsHomeRecommendProductController {
@@ -92,4 +92,6 @@ public class SmsHomeRecommendProductController {
         }
         return flag ? CommonResult.success(flag) : CommonResult.failed("失败");
     }
+
+
 }

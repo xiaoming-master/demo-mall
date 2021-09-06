@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -41,7 +43,7 @@ public class OmsOrderReturnApply implements Serializable {
     private String orderSn;
 
     @ApiModelProperty(value = "申请时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "会员用户名")
     private String memberUsername;
@@ -59,7 +61,7 @@ public class OmsOrderReturnApply implements Serializable {
     private Integer status;
 
     @ApiModelProperty(value = "处理时间")
-    private LocalDateTime handleTime;
+    private Date handleTime;
 
     @ApiModelProperty(value = "商品图片")
     private String productPic;
@@ -101,7 +103,7 @@ public class OmsOrderReturnApply implements Serializable {
     private String receiveMan;
 
     @ApiModelProperty(value = "收货时间")
-    private LocalDateTime receiveTime;
+    private Date receiveTime;
 
     @ApiModelProperty(value = "收货备注")
     private String receiveNote;

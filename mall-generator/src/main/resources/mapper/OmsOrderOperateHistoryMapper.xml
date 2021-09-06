@@ -4,17 +4,26 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ming.mall.model.OmsOrderOperateHistory">
-        <id column="id" property="id" />
-        <result column="order_id" property="orderId" />
-        <result column="operate_man" property="operateMan" />
-        <result column="create_time" property="createTime" />
-        <result column="order_status" property="orderStatus" />
-        <result column="note" property="note" />
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="operate_man" property="operateMan"/>
+        <result column="create_time" property="createTime"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="note" property="note"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, order_id, operate_man, create_time, order_status, note
     </sql>
+
+    <!--    批量插入操作记录-->
+    <insert id="insertList">
+        insert into oms_order_operate_history(order_id, operate_man, create_time, order_status, note)
+        values
+        <foreach collection="histories" item="history" separator=",">
+            (#{history.orderId},#{history.operateMan},#{history.createTime},#{history.orderStatus},#{history.note})
+        </foreach>
+    </insert>
 
 </mapper>

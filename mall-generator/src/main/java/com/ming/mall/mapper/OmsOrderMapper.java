@@ -1,7 +1,9 @@
 package com.ming.mall.mapper;
 
-import com.ming.mall.model.OmsOrder;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ming.mall.dto.OmsOrderDetail;
+import com.ming.mall.model.OmsOrder;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OmsOrderMapper extends BaseMapper<OmsOrder> {
 
+    /**
+     * 根据订单id获取订单信息
+     *
+     * @param orderId
+     * @return
+     */
+    OmsOrderDetail getOrderById(@Param(value = "orderId") Long orderId);
 }

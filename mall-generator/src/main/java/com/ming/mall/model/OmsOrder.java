@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -142,19 +144,19 @@ public class OmsOrder implements Serializable {
     private Integer useIntegration;
 
     @ApiModelProperty(value = "支付时间")
-    private LocalDateTime paymentTime;
+    private Date paymentTime;
 
     @ApiModelProperty(value = "发货时间")
-    private LocalDateTime deliveryTime;
+    private Date deliveryTime;
 
     @ApiModelProperty(value = "确认收货时间")
-    private LocalDateTime receiveTime;
+    private Date receiveTime;
 
     @ApiModelProperty(value = "评价时间")
-    private LocalDateTime commentTime;
+    private Date commentTime;
 
     @ApiModelProperty(value = "修改时间")
-    private LocalDateTime modifyTime;
+    private Date modifyTime;
 
 
 }
