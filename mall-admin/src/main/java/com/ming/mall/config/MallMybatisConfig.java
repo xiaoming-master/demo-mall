@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-public class MallMbatisConfig {
+public class MallMybatisConfig {
 
 }

@@ -22,7 +22,6 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
         if (configAttributes.isEmpty()) {
             return;
         }
-
         //获取访问者拥有的权限资源
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -30,7 +29,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
             //权限名字
             String attribute = configAttribute.getAttribute();
             for (GrantedAuthority authority : authorities) {
-                //只要有全选资源匹配，就直接放行
+                //只要有权限资源匹配，就直接放行
                 if (authority.getAuthority().trim().equals(attribute)) {
                     return;
                 }

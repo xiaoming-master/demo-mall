@@ -1,13 +1,9 @@
 package com.ming.mall.security.config;
 
-import com.ming.mall.security.component.DynamicAccessDecisionManager;
-import com.ming.mall.security.component.DynamicSecurityMetadataSource;
-import com.ming.mall.security.component.DynamicSecurityService;
-import com.ming.mall.security.component.JwtAuthenticationTokenFilter;
+import com.ming.mall.security.component.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,7 +33,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        //直接放行
+        web.ignoring().antMatchers("/admin/login",
+                "/admin/register",
+                "/druid/**",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/swagger/**",
+                "/**/v2/api-docs",
+                "/**/*.js",
+                "/**/*.css",
+                "/**/*.png",
+                "/**/*.ico",
+                "/webjars/springfox-swagger-ui/**");
     }
 
     /**
@@ -48,37 +56,35 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors()//开启跨域
-                .and()
-                .csrf().disable()
-                .authorizeRequests()
-                //不需要验证的
-                //允许跨域options
-                .antMatchers(HttpMethod.OPTIONS,"/admin/login", "/swagger-ui.html", "/swagger-resources/**", "/swagger/**", "/**/v2/api-docs", "/**/*.js", "/**/*.css", "/**/*.png", "/**/*.ico", "/webjars/springfox-swagger-ui/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
 
+        http.authorizeRequests()
+//        任何请求都需验证
+                .anyRequest()
+                .authenticated();
+
+        // 关闭跨站请求防护
+        http.csrf().disable()
+                //禁用session
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         //添加拦截器到UsernamePasswordAuthenticationFilter.class之前
         http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        //权限拒绝处理器
+        http.exceptionHandling()
+                .accessDeniedHandler(restfulAccessDeniedHandler())
+                .authenticationEntryPoint(restAuthenticationEntryPoint());
 
         //动态权限配置
-        if (dynamicSecurityService != null) {
-            http.authorizeRequests().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                @Override
-                public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                    o.setSecurityMetadataSource(dynamicSecurityMetadataSource());
-                    o.setAccessDecisionManager(dynamicAccessDecisionManager());
-                    return o;
-                }
-            });
-        }
-
+        http.authorizeRequests().withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+            @Override
+            public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                o.setSecurityMetadataSource(dynamicSecurityMetadataSource());
+                o.setAccessDecisionManager(dynamicAccessDecisionManager());
+                return o;
+            }
+        });
 
     }
 
@@ -105,6 +111,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
         return new DynamicAccessDecisionManager();
+    }
+
+    @Bean
+    public RestfulAccessDeniedHandler restfulAccessDeniedHandler() {
+        return new RestfulAccessDeniedHandler();
+    }
+
+    @Bean
+    public RestAuthenticationEntryPoint restAuthenticationEntryPoint() {
+        return new RestAuthenticationEntryPoint();
     }
 
 }

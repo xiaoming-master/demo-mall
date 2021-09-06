@@ -1,13 +1,16 @@
 package com.ming.mall.security.component;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.URLUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.PostConstruct;
+import javax.security.auth.login.Configuration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -52,7 +55,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
         //获取访问当前的url所需要要的资源
         Iterator<String> iterator = configAttributeMap.keySet().iterator();
-        if (iterator.hasNext()) {
+        while (iterator.hasNext()) {
             String pattern = iterator.next();
             if (matcher.match(pattern, path)) {
                 configAttributes.add(configAttributeMap.get(pattern));
