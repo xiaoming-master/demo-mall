@@ -69,8 +69,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/admin/email/login");
 
         http.authorizeRequests()
-//                .antMatchers("/admin/email/login")
-//                .permitAll()
+                .antMatchers("/admin/email/login", "/admin/login", "/admin/register")
+                .permitAll()
 //        任何请求都需验证
                 .anyRequest()
                 .authenticated()
