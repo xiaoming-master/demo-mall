@@ -7,7 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.ming.mall.mapper.UmsRoleMapper;
 import com.ming.mall.model.UmsMenu;
 import com.ming.mall.model.UmsRole;
-import com.ming.mall.service.AdminCacheService;
+import com.ming.mall.common.service.AdminCacheService;
 import com.ming.mall.service.IUmsRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

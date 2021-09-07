@@ -1,21 +1,22 @@
-package com.ming.mall.service.impl;
+package com.ming.mall.common.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ming.mall.common.service.AdminCacheService;
 import com.ming.mall.common.service.RedisService;
+import com.ming.mall.mapper.UmsAdminMapper;
 import com.ming.mall.mapper.UmsAdminRoleRelationMapper;
 import com.ming.mall.mapper.UmsRoleResourceRelationMapper;
 import com.ming.mall.model.UmsAdmin;
 import com.ming.mall.model.UmsAdminRoleRelation;
 import com.ming.mall.model.UmsResource;
 import com.ming.mall.model.UmsRoleResourceRelation;
-import com.ming.mall.service.AdminCacheService;
-import com.ming.mall.service.IUmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,13 +31,14 @@ public class AdminCacheServiceImpl implements AdminCacheService {
     private RedisService redisService;
 
     @Autowired
-    private IUmsAdminService adminService;
+    private UmsAdminMapper adminMapper;
 
     @Autowired
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
 
     @Autowired
     private UmsRoleResourceRelationMapper roleResourceRelationMapper;
+
     /**
      * 数据库路名字
      */
@@ -63,10 +65,11 @@ public class AdminCacheServiceImpl implements AdminCacheService {
      */
     @Override
     public void delAdmin(Long adminId) {
-        UmsAdmin admin = adminService.getById(adminId);
+        UmsAdmin admin = adminMapper.selectById(adminId);
         if (admin != null) {
-            String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
-            redisService.del(key);
+            String keyWithUsername = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
+            String keyWithEmail = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getEmail();
+            redisService.del(new ArrayList<>(Arrays.asList(keyWithUsername, keyWithEmail)));
         }
     }
 
@@ -136,7 +139,19 @@ public class AdminCacheServiceImpl implements AdminCacheService {
     @Override
     public void setAdmin(UmsAdmin admin) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
-        redisService.set(key, admin);
+        redisService.set(key, admin, REDIS_EXPIRE);
+    }
+
+    @Override
+    public UmsAdmin getAdminByEmail(String email) {
+        String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + "" + email;
+        return (UmsAdmin) redisService.get(key);
+    }
+
+    @Override
+    public void setAdminByEmail(UmsAdmin admin) {
+        String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + "" + admin.getEmail();
+        redisService.set(key, admin, REDIS_EXPIRE);
     }
 
 

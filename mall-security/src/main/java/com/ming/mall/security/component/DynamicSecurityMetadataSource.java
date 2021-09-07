@@ -1,16 +1,13 @@
 package com.ming.mall.security.component;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.URLUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.PostConstruct;
-import javax.security.auth.login.Configuration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

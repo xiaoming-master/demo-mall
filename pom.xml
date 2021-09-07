@@ -8,6 +8,7 @@
         <module>mall-common</module>
         <module>mall-security</module>
         <module>mall-admin</module>
+        <module>email-login</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

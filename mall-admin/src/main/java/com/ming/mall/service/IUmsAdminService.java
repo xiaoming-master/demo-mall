@@ -75,4 +75,11 @@ public interface IUmsAdminService extends IService<UmsAdmin> {
      * @return
      */
     int updateAdminInfo(Long id, UmsAdmin admin);
+
+    /**
+     * 通过邮箱获取管理员信息
+     * @param email
+     * @return
+     */
+    UmsAdmin getUserByEmail(String email);
 }

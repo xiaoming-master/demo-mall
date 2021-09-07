@@ -25,9 +25,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DynamicSecurityService dynamicSecurityService;
 
+    @Autowired
+    private IUserDetailsService userDetailsService;
+
+    @Autowired
+    private EmailSecurityConfig emailSecurityConfig;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService())
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -57,10 +63,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.cors()
+                .and()
+                .formLogin()
+                .loginProcessingUrl("/admin/email/login");
+
         http.authorizeRequests()
+//                .antMatchers("/admin/email/login")
+//                .permitAll()
 //        任何请求都需验证
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and().apply(emailSecurityConfig);
 
         // 关闭跨站请求防护
         http.csrf().disable()
@@ -92,7 +106,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {

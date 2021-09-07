@@ -17,8 +17,9 @@ import com.ming.mall.model.UmsAdminLoginLog;
 import com.ming.mall.model.UmsAdminRoleRelation;
 import com.ming.mall.model.UmsRole;
 import com.ming.mall.security.component.AdminUserDetail;
+import com.ming.mall.security.component.IUserDetailsService;
 import com.ming.mall.security.utils.JwtTokenUtil;
-import com.ming.mall.service.AdminCacheService;
+import com.ming.mall.common.service.AdminCacheService;
 import com.ming.mall.service.IUmsAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +86,25 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
                 admin = admins.get(0);
                 //放入redis
                 adminCacheService.setAdmin(admin);
+            }
+        }
+        return admin;
+    }
+
+    /**
+     * 通过邮箱获取管理员信息
+     * @param email
+     * @return
+     */
+    @Override
+    public UmsAdmin getUserByEmail(String email) {
+        UmsAdmin admin ;
+        admin = adminCacheService.getAdminByEmail(email);
+        if (admin == null) {
+            List<UmsAdmin> admins = list(new QueryWrapper<UmsAdmin>().eq("email", email));
+            if (CollUtil.isNotEmpty(admins)) {
+                admin = admins.get(0);
+                adminCacheService.setAdminByEmail(admin);
             }
         }
         return admin;
@@ -238,6 +258,8 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         adminCacheService.delAdmin(id);
         return count;
     }
+
+
 
     /**
      * 添加登陆记录

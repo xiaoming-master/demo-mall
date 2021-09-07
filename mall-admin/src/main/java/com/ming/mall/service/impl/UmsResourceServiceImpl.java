@@ -7,7 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.ming.mall.mapper.UmsResourceMapper;
 import com.ming.mall.mapper.UmsRoleResourceRelationMapper;
 import com.ming.mall.model.UmsResource;
-import com.ming.mall.service.AdminCacheService;
+import com.ming.mall.common.service.AdminCacheService;
 import com.ming.mall.service.IUmsResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

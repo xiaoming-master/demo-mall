@@ -39,7 +39,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     private Long REDIS_EXPIRE;
     @Value("${redis.key.treeMenu}")
     private String REDIS_TREE_MENU;
-    private final String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
+//    private final String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
 
     @Override
     public int createMenu(UmsMenu umsMenu) {
@@ -47,6 +47,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         //设置菜单级别
         setLevel(umsMenu);
         //删除redis数据
+        String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
         redisService.del(key);
         return menuMapper.insert(umsMenu);
     }
@@ -76,6 +77,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
     public List<UmsMenuNode> getMenuByTree() {
         List<UmsMenuNode> umsMenuNodes = null;
         //从redis中获取
+        String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
         umsMenuNodes = (List<UmsMenuNode>) redisService.get(key);
         if (CollUtil.isEmpty(umsMenuNodes)) {//redis中没有，从数据库中获取
             umsMenuNodes = menuMapper.getMenuByTree(0L);
@@ -91,6 +93,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         //修改等级
         setLevel(umsMenu);
         //删除redis中的数据
+        String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
         redisService.del(key);
         //更新
         return menuMapper.updateById(umsMenu);
@@ -120,6 +123,7 @@ public class UmsMenuServiceImpl extends ServiceImpl<UmsMenuMapper, UmsMenu> impl
         menu.setId(id);
         menu.setHidden(hidden);
         //删除redis中的数据
+        String key = REDIS_DATABASE + ":" + REDIS_TREE_MENU;
         redisService.del(key);
         //更新数据
         return menuMapper.updateById(menu);

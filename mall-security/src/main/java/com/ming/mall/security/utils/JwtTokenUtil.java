@@ -123,6 +123,15 @@ public class JwtTokenUtil {
     }
 
     /**
+     * 根据用户信息生成token
+     */
+    public String generateTokenByUsername(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USERNAME, username);
+        claims.put(CLAIM_KEY_CREATED, new Date());
+        return generateToken(claims);
+    }
+    /**
      * 判断token是否可以被刷新
      */
     public boolean canRefresh(String token) {

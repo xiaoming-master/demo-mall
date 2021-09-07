@@ -1,4 +1,4 @@
-package com.ming.mall.service;
+package com.ming.mall.common.service;
 
 import com.ming.mall.model.UmsAdmin;
 import com.ming.mall.model.UmsResource;
@@ -43,6 +43,17 @@ public interface AdminCacheService {
      * 设置缓存后台用户信息
      */
     void setAdmin(UmsAdmin admin);
+
+
+    /**
+     * 获取缓存后台用户信息
+     */
+    UmsAdmin getAdminByEmail(String email);
+
+    /**
+     * 设置缓存后台用户信息
+     */
+    void setAdminByEmail(UmsAdmin admin);
 
     /**
      * 获取缓存后台用户资源列表

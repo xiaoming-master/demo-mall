@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ming.mall.mapper.UmsRoleResourceRelationMapper;
 import com.ming.mall.model.UmsRoleResourceRelation;
-import com.ming.mall.service.AdminCacheService;
+import com.ming.mall.common.service.AdminCacheService;
 import com.ming.mall.service.IUmsRoleResourceRelationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
